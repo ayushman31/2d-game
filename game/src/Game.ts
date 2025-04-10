@@ -26,6 +26,7 @@ export default class HelloWorldScene extends Phaser.Scene {
 		debug(wallsLayer, this);
 
 		this.fauna = this.physics.add.sprite(128, 128, 'fauna', 'walk-down-3.png');
+		this.fauna.body.setSize(this.fauna.width*0.5 , this.fauna.height*0.8)
 
 		this.anims.create({
 			key: 'fauna-idle-down',
@@ -78,7 +79,7 @@ export default class HelloWorldScene extends Phaser.Scene {
 			this.fauna.anims.play('fauna-run-side', true);
 			this.fauna.setVelocity(-speed, 0);
 			this.fauna.scaleX = -1;
-			this.fauna.body.offset.x = 32;
+			this.fauna.body.offset.x = 24;
 		} else if(this.cursors.down?.isDown){
 			this.fauna.anims.play('fauna-run-down', true);
 			this.fauna.setVelocity(0, speed)
@@ -89,7 +90,7 @@ export default class HelloWorldScene extends Phaser.Scene {
 			this.fauna.anims.play('fauna-run-side', true);
 			this.fauna.setVelocity(speed, 0);
 			this.fauna.scaleX = 1;
-			this.fauna.body.offset.x = 0;
+			this.fauna.body.offset.x = 8;
 		} else{
 			const parts = this.fauna.anims.currentAnim.key.split('-');
 			parts[1] = 'idle';
