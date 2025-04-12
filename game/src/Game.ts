@@ -4,7 +4,7 @@ import { demonAnims } from './animations/DemonAnims';
 import { characterAnims } from './animations/CharacterAnims';
 import Demon from './enemy/Demon';
 
-export default class HelloWorldScene extends Phaser.Scene {
+export default class Game extends Phaser.Scene {
 
 	private cursors !: Phaser.Types.Input.Keyboard.CursorKeys;
 	// private fauna !: Phaser.GameObjects.Sprite; //no physics applied in the character
@@ -28,7 +28,7 @@ export default class HelloWorldScene extends Phaser.Scene {
 		
 		map.createStaticLayer('ground', tileset);
 		const wallsLayer = map.createStaticLayer('walls', tileset);
-		wallsLayer.setCollisionByProperty({ collides: true });
+		wallsLayer.setCollisionByProperty({ collides: true });  //so that the character doesn't go through the walls
 
 		// debug(wallsLayer, this);
 
@@ -39,13 +39,18 @@ export default class HelloWorldScene extends Phaser.Scene {
 		this.fauna.anims.play('fauna-idle-down');
 		this.physics.add.collider(this.fauna, wallsLayer);
 		this.cameras.main.startFollow(this.fauna, true);
-
+		
 		const demons = this.physics.add.group({
-			classType: Demon
-		});
-
+			classType: Demon,
+			createCallback: (go) => {
+				const demGo = go as Demon;
+				demGo.body.onCollide = true;
+			}
+		});//groups all the demons which are created using the Demon class
+		
 		demons.get(256,128, 'demon')
 		
+		this.physics.add.collider(demons, wallsLayer); //so that the demon doesn't go through the walls
 	};
 
 	update(time: number, delta: number): void {
